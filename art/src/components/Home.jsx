@@ -6,17 +6,29 @@ import { MdEmail } from 'react-icons/md';
 
 function Home() {
   const [content, setContent] = useState([])
+  const [loading, setLoading] = useState(true); // loading state
   const API_BASE = import.meta.env.VITE_API_URL;
 
 
   useEffect(() => {
-    // Fetch content from the backend
     axios.get(`${API_BASE}/api/get-content`)
       .then((response) => {
         setContent(response.data);
+        setLoading(false); // stop loading when done
       })
-      .catch((error) => console.error(error));
-}, []);
+      .catch((error) => {
+        console.error(error);
+        setLoading(false); // stop loading even if error occurs
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold text-gray-600">Loading content...</p>
+      </div>
+    );
+  }
 
   return (
     <div className='flex flex-wrap bg-[#E5E5E5] max-w-screen w-full'>
