@@ -10,7 +10,8 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://art-portfolio-eta.vercel.app"  # ✅ your Vercel frontend
+    "https://art-portfolio-eta.vercel.app" 
+    "https://art-portfolio-git-main-shikhar-seths-projects.vercel.app/" # ✅ your Vercel frontend
 ]}}, supports_credentials=True)
 
 cloudinary.config(
