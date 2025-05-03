@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: flask-backend
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn app:app
+    rootDir: backend
+    envVars:
+      - key: CLOUDINARY_CLOUD_NAME
+        value: dko8vw6dr
+      - key: CLOUDINARY_API_KEY
+        value: 147894539887853
+      - key: CLOUDINARY_API_SECRET
+        value: PJDisH3ZFkvul-nGqdQOllEavms
