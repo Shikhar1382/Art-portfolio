@@ -7,7 +7,11 @@ import cloudinary.api
 import os
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://art-portfolio-eta.vercel.app"  # ✅ your Vercel frontend
+]}}, supports_credentials=True)
 
 cloudinary.config(
     cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
