@@ -22,9 +22,23 @@ function Card({img, align}){
                 <h1 className="pb-[8vw] md:p-10 md:pt-5 text-2xl md:text-4xl text-[#5a189a] font-semibold text-end">{img.title}</h1>
                 <p className="px-[1vw] md:p-10 text-[#001d3d] whitespace-pre-wrap md:pb-5 md:text-xl text-end">{img.text}</p>
               </div>
-                <img src={img.image} alt="hover zoom"
-                 onClick={()=>setIsOpen(true)}
-                 className="w-[80vw] md:max-w-[400px] transition-transform origin-bottom-right cursor-pointer duration-300 hover:scale-110 rounded-md object-contain"></img>
+              <img
+               src={img.image}
+               alt="hover zoom"
+               onClick={() => setIsOpen(true)}
+               onContextMenu={(e) => e.preventDefault()} // Prevent right-click
+               onTouchStart={(e) => {
+                if (e.touches.length > 1) e.preventDefault(); // For multitouch (e.g. zoom)
+                // Prevent long press
+                const timeout = setTimeout(() => e.preventDefault(), 500);
+                 e.target.longPressTimeout = timeout;
+              }}
+              conTouchEnd={(e) => {
+              clearTimeout(e.target.longPressTimeout);
+              }}
+              draggable={false}
+              className="w-[80vw] md:max-w-[400px] transition-transform origin-bottom-right cursor-pointer duration-300 hover:scale-110 rounded-md object-contain select-none pointer-events-auto"
+              />
             </div>
             {isOpen && (
               <div
@@ -45,9 +59,23 @@ function Card({img, align}){
     return(
         <>
         <div className="flex flex-col md:flex-row w-full items-start md:items-end justify-start">
-            <img src={img.image} alt="hover zoom"
-            onClick={()=>setIsOpen(true)}
-            className="w-full max-w-[80vw] md:max-w-[400px] transition-transform cursor-pointer origin-bottom-left duration-300 hover:scale-110  h-auto rounded-md object-contain"></img>
+              <img
+               src={img.image}
+               alt="hover zoom"
+               onClick={() => setIsOpen(true)}
+               onContextMenu={(e) => e.preventDefault()} // Prevent right-click
+               onTouchStart={(e) => {
+                if (e.touches.length > 1) e.preventDefault(); // For multitouch (e.g. zoom)
+                // Prevent long press
+                const timeout = setTimeout(() => e.preventDefault(), 500);
+                 e.target.longPressTimeout = timeout;
+              }}
+              conTouchEnd={(e) => {
+              clearTimeout(e.target.longPressTimeout);
+              }}
+              draggable={false}
+              className="w-[80vw] md:max-w-[400px] transition-transform origin-bottom-right cursor-pointer duration-300 hover:scale-110 rounded-md object-contain select-none pointer-events-auto"
+              />
             <div className="flex h-full flex-col justify-between">
                 <h1 className="pb-[8vw] md:p-10 md:pt-5 text-2xl md:text-4xl text-[#5a189a] font-semibold text-start">{img.title}</h1>
                 <p className="md:p-10 md:pb-5 text-[#001d3d] whitespace-pre-wrap md:text-xl text-start">{img.text}</p>
