@@ -9,6 +9,8 @@ function AdminPanel(){
     const [title, setTitle] = useState("")
     const [text, setText] = useState("")
     const [deletePanel, setDel] = useState(false)
+    const API_BASE = import.meta.env.VITE_API_URL;
+
 
     const handleImageChange = (e)=>{
         const file = e.target.files[0];
@@ -34,7 +36,7 @@ function AdminPanel(){
         // formData.append("thumbnail", thumbnail);
     
         try {
-          const response = await axios.post("http://127.0.0.1:5000/upload", formData, {
+          const response = await axios.post(`${API_BASE}/upload`, formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },

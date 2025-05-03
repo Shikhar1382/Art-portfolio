@@ -6,10 +6,12 @@ import { MdEmail } from 'react-icons/md';
 
 function Home() {
   const [content, setContent] = useState([])
+  const API_BASE = import.meta.env.VITE_API_URL;
+
 
   useEffect(() => {
     // Fetch content from the backend
-    axios.get('/api/get-content')
+    axios.get(`${API_BASE}/api/get-content`)
       .then((response) => {
         setContent(response.data);
       })

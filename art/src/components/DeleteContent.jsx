@@ -4,10 +4,12 @@ import axios from 'axios';
 function DeleteContent(){
     const [content, setContent] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
+    const API_BASE = import.meta.env.VITE_API_URL;
+
 
     useEffect(() => {
         // Fetch content from the backend
-        axios.get('/api/get-content')
+        axios.get(`${API_BASE}/api/get-content`)
           .then((response) => {
             setContent(response.data);
           })
@@ -28,7 +30,7 @@ function DeleteContent(){
     const handleDelete = async () => {
         try {
           // Send selected items to backend for deletion
-          await axios.post('/api/delete-content', { ids: selectedItems });
+          await axios.post(`${API_BASE}/api/delete-content`, { ids: selectedItems });
           setContent(content.filter(item => !selectedItems.includes(item.id)));
           setSelectedItems([]); // Reset selected items
         } catch (error) {

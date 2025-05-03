@@ -7,9 +7,11 @@ function Admin(){
     const [password, setpass] = useState('')
     const [authenticated, setAuthenticated] = useState(false);
     const [error, setError] = useState('');
+    const API_BASE = import.meta.env.VITE_API_URL;
+
     const Check = async () => {
         try {
-            const response = await axios.post('http://127.0.0.1:5000/api/admin/login', { password });
+            const response = await axios.post(`${API_BASE}/api/admin/login`, { password });
             if (response.data.success) {
                 setAuthenticated(true);
                 setError('');
