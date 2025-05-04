@@ -11,7 +11,8 @@ CORS(app, resources={r"/*": {"origins": [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "https://art-portfolio-eta.vercel.app",
-    "https://art-portfolio-git-main-shikhar-seths-projects.vercel.app" # ✅ your Vercel frontend
+    "https://art-portfolio-git-main-shikhar-seths-projects.vercel.app",
+    "https://shikhar-art-shikhar-seths-projects.vercel.app/" # ✅ your Vercel frontend
 ]}}, supports_credentials=True)
 
 # public id of watermark = okbynyyzhxirpgvbnoug
