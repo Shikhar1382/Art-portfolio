@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from "react";
+import Edit from "./Edit";
 import axios from 'axios';
 
 function DeleteContent(){
     const [content, setContent] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
+    const [editingItem, setEditingItem] = useState(null);
     const API_BASE = import.meta.env.VITE_API_URL;
 
 
+    const fetchContent = () => {
+      axios.get('/api/get-content')
+        .then((response) => {
+          setContent(response.data);
+        })
+        .catch((error) => console.error(error));
+    };
+  
     useEffect(() => {
-        // Fetch content from the backend
-        axios.get(`${API_BASE}/api/get-content`)
-          .then((response) => {
-            setContent(response.data);
-          })
-          .catch((error) => console.error(error));
+      fetchContent();
     }, []);
 
     const handleSelect = (id) => {
@@ -52,8 +57,16 @@ function DeleteContent(){
               onChange={() => handleSelect(item.id)}
               className="mt-2"
             />
+            <button onClick={() => setEditingItem(item)} className="text-white bg-sky-800 mx-2 px-2 rounded">Edit</button>
           </div>
         ))}
+        {editingItem && (
+          <Edit
+          content={editingItem}
+          onClose={() => setEditingItem(null)}
+          onUpdate={fetchContent}
+         />
+        )}
       </div>
 
       <button 

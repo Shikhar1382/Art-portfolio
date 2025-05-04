@@ -14,6 +14,9 @@ CORS(app, resources={r"/*": {"origins": [
     "https://art-portfolio-git-main-shikhar-seths-projects.vercel.app" # ✅ your Vercel frontend
 ]}}, supports_credentials=True)
 
+# public id of watermark = okbynyyzhxirpgvbnoug
+# public id watermark 45% opacity = jdjddhybnutmcfxexwpd
+
 cloudinary.config(
     cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
     api_key=os.environ.get("CLOUDINARY_API_KEY"),
@@ -73,7 +76,15 @@ def upload_files():
     Title = request.form['title']
     Text = request.form['text']
 
-    image_upload = cloudinary.uploader.upload(image)#returns a dictionary
+    image_upload = cloudinary.uploader.upload(image,transformation=[
+        
+            {"overlay": "jdjddhybnutmcfxexwpd"},  # Your watermark public ID
+            {'flags': ["layer_apply", "tiled"]},                       # Apply tiling (repeat the watermark)
+            {"opacity": 100},                         # Optional: adjust opacity
+            {"width": 1.0},                          # Optional: scale the watermark (relative size)
+            {"gravity": "center"}                    # Optional: center watermark position for tiling
+        
+    ])#returns a dictionary
     # thumb_upload = cloudinary.uploader.upload(thumbnail)
 
     imageUrl = image_upload['secure_url']
@@ -91,6 +102,48 @@ def upload_files():
     db.session.add(new_content)#adding new_content to db
     db.session.commit()#saves it permanently
     return jsonify(new_content.to_dict()), 201
+
+@app.route('/api/edit-content/<string:content_id>', methods=['PUT'])
+def edit_content(content_id):
+    data = request.get_json()
+
+    content = db.session.get(Content, content_id)
+    if not content:
+        return jsonify({'error': 'Content not found'}), 404
+    
+    content.id = data.get('new_id', content.id)
+    content.title = data.get('title', content.title)
+    content.text = data.get('text', content.text)
+    content.image = data.get('image', content.image)
+    # content.thumbnail = data.get('thumbnail', content.thumbnail)
+
+    db.session.commit()
+    return jsonify({'message': 'Content updated successfully'})
+
+@app.route('/api/upload-image', methods=['POST'])
+def upload_image():
+    if 'image' not in request.files:
+        return jsonify({'error': 'No image file provided'}), 400
+
+    file = request.files['image']
+
+    result = cloudinary.uploader.upload(file,transformation=[
+        
+            {"overlay": "jdjddhybnutmcfxexwpd"},  # Your watermark public ID
+            {'flags': ["layer_apply", "tiled"]},                       # Apply tiling (repeat the watermark)
+            {"opacity": 100},                         # Optional: adjust opacity
+            {"width": 1.0},                          # Optional: scale the watermark (relative size)
+            {"gravity": "center"}                    # Optional: center watermark position for tiling
+        
+    ])#returns a dictionary
+    image_url = result['secure_url']
+    image_id = result['public_id']
+    
+    return jsonify({
+        'image_url': image_url,
+        'id': image_id
+        # 'thumbnail': image_url  # optional resizing
+    })
 
 @app.route('/api/get-content', methods=['GET'])
 def get_content():
@@ -119,6 +172,13 @@ def delete_content():
     # Delete from Cloudinary
     cloudinary.api.delete_resources(ids_to_delete)
 
+    return jsonify({"message": "Deleted successfully"}), 200
+
+@app.route('/api/delete-image', methods = ['POST'])
+def delete_image():
+    data = request.get_json()
+    id_to_delete = data['id']
+    cloudinary.api.delete_resources([id_to_delete])
     return jsonify({"message": "Deleted successfully"}), 200
 
 
