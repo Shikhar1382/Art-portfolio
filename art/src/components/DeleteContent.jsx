@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Edit from "./Edit";
 import axios from 'axios';
+import Edit from "./Edit";
 
 function DeleteContent(){
     const [content, setContent] = useState([]);
@@ -8,9 +8,8 @@ function DeleteContent(){
     const [editingItem, setEditingItem] = useState(null);
     const API_BASE = import.meta.env.VITE_API_URL;
 
-
     const fetchContent = () => {
-      axios.get('/api/get-content')
+      axios.get(`${API_BASE}/api/get-content`)
         .then((response) => {
           setContent(response.data);
         })
@@ -35,9 +34,11 @@ function DeleteContent(){
     const handleDelete = async () => {
         try {
           // Send selected items to backend for deletion
+          console.log("deleting:",selectedItems);
           await axios.post(`${API_BASE}/api/delete-content`, { ids: selectedItems });
           setContent(content.filter(item => !selectedItems.includes(item.id)));
           setSelectedItems([]); // Reset selected items
+          console.log("new selected:", selectedItems)
         } catch (error) {
           console.error('Error deleting content:', error);
         }
@@ -54,7 +55,10 @@ function DeleteContent(){
             <input
               type="checkbox"
               checked={selectedItems.includes(item.id)}
-              onChange={() => handleSelect(item.id)}
+              onChange={() => {
+                handleSelect(item.id)
+                console.log("selected:",item.id)
+              }}
               className="mt-2"
             />
             <button onClick={() => setEditingItem(item)} className="text-white bg-sky-800 mx-2 px-2 rounded">Edit</button>
@@ -67,6 +71,7 @@ function DeleteContent(){
           onUpdate={fetchContent}
          />
         )}
+
       </div>
 
       <button 
