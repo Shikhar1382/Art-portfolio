@@ -67,7 +67,7 @@ function AdminPanel(){
         {/* thumbnail
         <input name="thumbnail" type="file" onChange={handleThumbChange} className="w-full m-2" /> */}
         <button onClick={handleUpload} className="m-2 bg-white border border-black">upload</button>
-        <button onClick={()=>{setDel(true)}} className="border border-black bg-red-600 text-white mx-2">Delete content</button>
+        <button onClick={()=>{setDel(true)}} className="border border-black bg-red-600 text-white mx-2">Edit content</button>
         </div>
       </div>
     )
